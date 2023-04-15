@@ -13,6 +13,7 @@ WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+#
 SNHEIGHT = 40
 SNWIDTH = 40
 
@@ -49,7 +50,7 @@ staticSn = [staticSnake1, staticSnake2, staticSnake3, staticSnake2]
 
 
 
-def drawWindow(snek, rightMove, rightMoveInd, direction, leftMove, leftMoveInd, staticSn, staticSnInd):
+def drawWindow(snek:pygame.Rect, rightMove, rightMoveInd, direction, leftMove, leftMoveInd, staticSn, staticSnInd):
     WIN.fill(WHITE)
     for i in range(0,8):
         for j in range(0, 8):
