@@ -9,12 +9,12 @@ get_ticks() returns milliseconds
 '''
 
 FPS = 60
-WIDTH, HEIGHT = 900, 500
+WIDTH, HEIGHT = 1350, 750
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-SNHEIGHT = 40
-SNWIDTH = 40
+SNHEIGHT = 50
+SNWIDTH = 50
 JUMPHEIGHT = 30#constant for how hight snek gets
 JUMPVEL = 5
 
@@ -64,16 +64,17 @@ snJump8 = pygame.image.load(os.path.join('sprites', 'snJump8.png'))
 snJump8 = pygame.transform.scale(snJump8, (SNWIDTH, SNHEIGHT))
 
 snJump = [snJump1, snJump2, snJump3, snJump4, snJump5, snJump6, snJump7, snJump8]
+snCrouch = [snJump1, snJump2, snJump3, snJump4]
 rightMove = [snakeRight1, snakeRight2, snakeRight3, snakeRight2]#though not created first snakeright2 looks best as a standing still
 leftMove = [snakeLeft1, snakeLeft2, snakeLeft3, snakeLeft2]
 staticSn = [staticSnake1, staticSnake2, staticSnake3, staticSnake2]
 
 
 
-def drawWindow(snek, rightMove, rightMoveInd, direction, leftMove, leftMoveInd, staticSn, staticSnInd, snJump, snJumpInd):
+def drawWindow(snek, rightMove, rightMoveInd, direction, leftMove, leftMoveInd, staticSn, staticSnInd, snJump, snJumpInd, snCrouch, snCrouchInd):
     WIN.fill(WHITE)
-    for i in range(0,8):
-        for j in range(0, 8):
+    for i in range(0,11):
+        for j in range(0, 12):
             WIN.blit(wall,(wall.get_width() * i, wall.get_height() * j))
     pygame.draw.rect(WIN, BLACK, ground0)
     if direction == 'right':
@@ -82,6 +83,8 @@ def drawWindow(snek, rightMove, rightMoveInd, direction, leftMove, leftMoveInd, 
         WIN.blit(leftMove[leftMoveInd], (snek.x, snek.y))
     elif direction == 'up':
         WIN.blit(snJump[snJumpInd], (snek.x, snek.y))
+    elif direction == 'down':
+        WIN.blit(snCrouch[snCrouchInd], (snek.x, snek.y))
     else:
         WIN.blit(staticSn[staticSnInd], (snek.x, snek.y))
     pygame.display.update()
@@ -93,6 +96,7 @@ def main():
     leftMoveInd = 0
     staticSnInd = 0
     snJumpInd = 0
+    snCrouchInd = 0
     clock = pygame.time.Clock()
     run = True
     startTime = pygame.time.get_ticks()
@@ -111,13 +115,15 @@ def main():
 
         keysPressed = pygame.key.get_pressed()
         if (keysPressed[pygame.K_w] or keysPressed[pygame.K_SPACE]) and snek.collidelist(ground) != -1:
+            snCrouchInd = 0
             curJumpHeight = JUMPHEIGHT
             for i in range(0,8):
-                drawWindow(snek, rightMove, rightMoveInd, 'up', leftMove, leftMoveInd, staticSn, staticSnInd, snJump, snJumpInd)
+                drawWindow(snek, rightMove, rightMoveInd, 'up', leftMove, leftMoveInd, staticSn, staticSnInd, snJump, snJumpInd, snCrouch, snCrouchInd)
                 snJumpInd = (snJumpInd + 1)% 8
                 pygame.time.delay(20)
 
         if keysPressed[pygame.K_d]:
+            snCrouchInd = 0
             direction = 'right'
             snek.x += 2
             currentTime = pygame.time.get_ticks()
@@ -125,20 +131,29 @@ def main():
                 rightMoveInd = (rightMoveInd + 1) % 4
                 startTime = currentTime
         elif keysPressed[pygame.K_a]:
+            snCrouchInd = 0
             direction = 'left'
             snek.x -= 2
             currentTime = pygame.time.get_ticks()
             if currentTime - startTime >= 100:
                 leftMoveInd = (leftMoveInd + 1) % 4
                 startTime = currentTime
+        elif keysPressed[pygame.K_s]:
+            direction = 'down'
+            currentTime = pygame.time.get_ticks()
+            if currentTime - startTime >= 100:
+                if snCrouchInd != 3:
+                    snCrouchInd = (snCrouchInd + 1) % 4
+                startTime = currentTime
         else:
+            snCrouchInd = 0
             direction = 'none'
             currentTime = pygame.time.get_ticks()
             if currentTime - startTime >= 166:
                 staticSnInd = (staticSnInd + 1) % 4
                 startTime = currentTime
 
-        drawWindow(snek, rightMove, rightMoveInd, direction, leftMove, leftMoveInd, staticSn, staticSnInd, snJump, snJumpInd)
+        drawWindow(snek, rightMove, rightMoveInd, direction, leftMove, leftMoveInd, staticSn, staticSnInd, snJump, snJumpInd, snCrouch, snCrouchInd)
 
 if __name__ == "__main__":
     main()
