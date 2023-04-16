@@ -1,5 +1,5 @@
 import pygame
-import asyncio
+import multiprocessing
 from Mobs.bat import Bat
 from Mobs.aligator import Aligator
 from Mobs.snek import Snek
@@ -16,21 +16,13 @@ WIDTH, HEIGHT = 1350, 750
 
 class Springboard():
     def __init__(self):
-        print(__file__)
+        # print(__file__)
+        pass
+
+    
 
     def run(self):
         WIN = pygame.display.set_mode((WIDTH, HEIGHT))  
-        clock = pygame.time.Clock()
-        run = asyncio.run(self.sprang(WIN))
-        # != False is very intentional, do not replace with while(run)!!!!
-        while(run != False):
-            clock.tick(FPS)#insures we dont go over FPS(60) frames per second
-            for event in pygame.event.get(): #gets list of all events and loops through them
-                if event.type == pygame.QUIT: #if the event is quit
-                    run = False
-                    pygame.quit()
-    
-    async def sprang(WIN: pygame.Surface):
         sel = 0
         while (sel != -1):
             if sel == 0:
@@ -42,6 +34,3 @@ class Springboard():
             elif sel == 3:
                 sel = Level3(WIN).run()
         return False
-
-              
-

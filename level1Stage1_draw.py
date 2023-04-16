@@ -6,8 +6,8 @@ FPS = 60
 WIDTH, HEIGHT = 1350, 750
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
-wall = pygame.image.load(os.path.join('sprites', 'wall2.png'))
-floor = pygame.image.load(os.path.join('sprites', 'floor.png'))
+wall = pygame.image.load(os.path.join('src','Stages','sprites', 'wall2.png'))
+floor = pygame.image.load(os.path.join('src','Stages','sprites', 'floor.png'))
 floor = pygame.transform.scale(floor, (600, 60))
 
 listOfDrawings = []
